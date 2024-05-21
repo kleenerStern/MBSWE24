@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+import "time"
 
 // Example
 
@@ -264,10 +265,17 @@ func test_Dict() {
 
 func main() {
 
-	test()
-
+	//test()
+	startingTimeLookup := time.Now()
+	fmt.Printf("time before test_lookup %s \n", startingTimeLookup)
 	test_Lookup()
-
+	//executionTimeLookup := time.Since(startingTimeLookup)
+	fmt.Println(time.Since(startingTimeLookup))
+	startingTimeDict := time.Now()
+	fmt.Printf("time before test_dict %s \n", startingTimeDict)
 	test_Dict()
+	time.Sleep(1 * time.Second)
+	//executionTimeDict := time.Since(startingTimeDict)
+	fmt.Println(time.Since(startingTimeDict))
 
 }
