@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 import "time"
 
 // Example
@@ -192,16 +195,50 @@ func test_Dict() {
 }
 
 func main() {
+	// Actual Test
+	// init shapes
+	var r rectangle = rectangle{1, 2}
+	var s square = square{3}
+
+	//init wrappers
+	area_Rec_Wrapper := func(v interface{}) int {
+		return area_Rec(v.(rectangle))
+	}
+	area_Sq_Wrapper := func(v interface{}) int {
+		return area_Sq(v.(square))
+	}
+
+	//init dict shapes with value and wrapper func
+	rDictShape := shape_Value{r, area_Rec_Wrapper}
+	sDictShape := shape_Value{s, area_Sq_Wrapper}
+
 	startingTimeLookup := time.Now()
-	fmt.Printf("time before test_lookup %s \n", startingTimeLookup)
-	test_Lookup()
-	executionTimeLookup := time.Since(startingTimeLookup)
-	fmt.Printf("executionTimeLookup: %s \n", executionTimeLookup)
+	time.Sleep(1 * time.Second)
+	for i := 0; i < 1000; i++ {
+		sumArea_Lookup(r, s)
+	}
+	executionTimeLookup := time.Since(startingTimeLookup) - 1*time.Second
 
 	startingTimeDict := time.Now()
-	fmt.Printf("time before test_dict %s \n", startingTimeDict)
-	test_Dict()
 	time.Sleep(1 * time.Second)
-	executionTimeDict := time.Since(startingTimeDict) - (1 * time.Second)
-	fmt.Printf("executionTimeDict: %s \n", executionTimeDict)
+	for i := 0; i < 1000; i++ {
+		sumArea_Dict(rDictShape, sDictShape)
+	}
+	executionTimeDict := time.Since(startingTimeDict) - 1*time.Second
+
+	fmt.Printf("total execution time for 1000 * lookup: %s \n", executionTimeLookup)
+	fmt.Printf("mean execution time for lookup: %s \n", executionTimeLookup/1000)
+	fmt.Printf("total execution time for 1000 * dict: %s \n", executionTimeDict)
+	fmt.Printf("mean execution time for dict: %s \n", executionTimeDict/1000)
+
+	percentageChange := (float64(executionTimeDict) - float64(executionTimeLookup)) / float64(executionTimeLookup) * 100
+
+	fmt.Printf("The execution of dict took %.2f%% ", math.Abs(percentageChange))
+	if percentageChange > 0 {
+		fmt.Println("more time than the execution of lookup.")
+	} else if percentageChange < 0 {
+		fmt.Println("less time than the execution of lookup.")
+	} else {
+		fmt.Println("the same time as the execution of lookup.")
+	}
 }
