@@ -43,41 +43,6 @@ func sumArea(x, y shape) int {
 	return x.area() + y.area()
 }
 
-func sumAreaScaleBefore(n int, x, y shapeExt) int {
-	x.scale(n)
-	y.scale(n)
-	return x.area() + y.area()
-}
-
-func test() {
-	var r rectangle = rectangle{1, 2}
-	var s square = square{3}
-
-	x1 := r.area() + s.area()
-	fmt.Printf("%d \n", x1)
-
-	x2 := sumArea(r, s)
-	fmt.Printf("%d \n", x2)
-
-	pt := &r
-
-	x3 := pt.area()
-	// Implicit conversion to
-	// (*pt).area()
-	//
-	// Hence, any "value" receiver also implies the corresponding "pointer" receiver.
-
-	fmt.Printf("%d \n", x3)
-
-	//  x3 := sumAreaScaleBefore(3, r, s)
-	//
-	// "rectangle does not implement shapeExt (scale method has pointer receiver)"
-	// same applies to square
-
-	x4 := sumAreaScaleBefore(3, &r, &s)
-	fmt.Printf("%d \n", x4)
-}
-
 // Introducing unique function names for overloaded methods
 func area_Rec(r rectangle) int {
 	return r.length * r.width
@@ -123,7 +88,6 @@ func sumArea_Lookup(x, y interface{}) int {
 }
 
 func test_Lookup() {
-
 	var r rectangle = rectangle{1, 2}
 	var s square = square{3}
 
@@ -132,7 +96,6 @@ func test_Lookup() {
 
 	// rectangle <= interface{} & square <= interface{}
 	x2 := sumArea_Lookup(r, s)
-
 	fmt.Printf("%d \n", x2)
 }
 
@@ -178,11 +141,6 @@ func test_Dict() {
 	// Implicit conversion from pointer to value
 	x3 := area_Rec(*pt)
 	fmt.Printf("%d \n", x3)
-
-	//  x3 := sumAreaScaleBefore(3, r, s)
-	//
-	// "rectangle does not implement shapeExt (scale method has pointer receiver)"
-	// same applies to square
 
 	// 2. Calling sumArea
 	// Wrapper functions are needed for the following reason.
@@ -234,18 +192,16 @@ func test_Dict() {
 }
 
 func main() {
-
-	//test()
 	startingTimeLookup := time.Now()
 	fmt.Printf("time before test_lookup %s \n", startingTimeLookup)
 	test_Lookup()
-	//executionTimeLookup := time.Since(startingTimeLookup)
-	fmt.Println(time.Since(startingTimeLookup))
+	executionTimeLookup := time.Since(startingTimeLookup)
+	fmt.Printf("executionTimeLookup: %s \n", executionTimeLookup)
+
 	startingTimeDict := time.Now()
 	fmt.Printf("time before test_dict %s \n", startingTimeDict)
 	test_Dict()
 	time.Sleep(1 * time.Second)
-	//executionTimeDict := time.Since(startingTimeDict)
-	fmt.Println(time.Since(startingTimeDict))
-
+	executionTimeDict := time.Since(startingTimeDict) - (1 * time.Second)
+	fmt.Printf("executionTimeDict: %s \n", executionTimeDict)
 }
