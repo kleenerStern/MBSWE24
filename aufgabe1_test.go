@@ -1,8 +1,6 @@
 package main
 
-import (
-	"testing"
-)
+import "testing"
 
 var r rectangle = rectangle{1, 2}
 var s square = square{3}
