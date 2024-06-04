@@ -6,7 +6,6 @@ import (
 	"time"
 )
 
-// Example
 type rectangle struct {
 	length int
 	width  int
@@ -77,19 +76,19 @@ func sumArea_Dict(x, y shape_Value) int {
 	return x.area(x.val) + y.area(y.val)
 }
 
+// wrapper functions
+func area_Rec_Wrapper(v interface{}) int {
+	return area_Rec(v.(rectangle))
+}
+func area_Sq_Wrapper(v interface{}) int {
+	return area_Sq(v.(square))
+}
+
 func main() {
 	// Actual Test
 	// init shapes
 	var r rectangle = rectangle{1, 2}
 	var s square = square{3}
-
-	//init wrappers
-	area_Rec_Wrapper := func(v interface{}) int {
-		return area_Rec(v.(rectangle))
-	}
-	area_Sq_Wrapper := func(v interface{}) int {
-		return area_Sq(v.(square))
-	}
 
 	//init dict shapes with value and wrapper func
 	rDictShape := shape_Value{r, area_Rec_Wrapper}
