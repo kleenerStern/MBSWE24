@@ -17,15 +17,6 @@ func (s square) area() int {
 	return s.length * s.length
 }
 
-func (r *rectangle) scale(x int) {
-	r.length = r.length * x
-	r.width = r.width * x
-}
-
-func (s *square) scale(x int) {
-	s.length = s.length * x
-}
-
 type shape interface {
 	area() int
 }
