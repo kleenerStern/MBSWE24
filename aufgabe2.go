@@ -1,59 +1,70 @@
 package main
 
-type shapeExt interface {
-	shape
-	perimeter()
+type association struct {
+	members int
+	staff   int
 }
 
-func (r rectangle) perimeter() int {
-	return 2 * (r.length + r.width)
+type company struct {
+	employees int
 }
 
-func (s square) perimeter() int {
-	return 4 * s.length
+// with method overloading
+func (a association) persons() int {
+	return a.members + a.staff
 }
 
-// Introducing unique function names for overloaded methods
-func perimeter_Rec(r rectangle) int {
-	return r.length * r.width
+func (c company) persons() int {
+	return c.employees
 }
 
-func perimeter_Sq(s square) int {
-	return s.length * s.length
+type organization interface {
+	persons() int
+}
+
+func sumPersons(x, y organization) int {
+	return x.persons() + y.persons()
 }
 
 // Run-time method lookup
-func perimeter_Lookup(x interface{}) int {
+func persons_association(a association) int {
+	return a.members + a.staff
+}
+
+func persons_company(c company) int {
+	return c.employees
+}
+
+func persons_lookup(x interface{}) int {
 	var y int
 
 	switch v := x.(type) {
-	case square:
-		y = perimeter_Sq(v)
-	case rectangle:
-		y = perimeter_Rec(v)
+	case association:
+		y = persons_association(v)
+	case company:
+		y = persons_company(v)
 	}
 	return y
 }
 
-func sumPerimeter_Lookup(x, y interface{}) int {
-	return perimeter_Lookup(x) + perimeter_Lookup(y)
+func sumPersons_Lookup(x, y interface{}) int {
+	return persons_lookup(x) + persons_lookup(y)
 }
 
 // Dictionary translation
-type shapeExt_Value struct {
-	val       interface{}
-	area      func(interface{}) int
-	perimeter func(interface{}) int
+type organization_Value struct {
+	val     interface{}
+	persons func(interface{}) int
 }
 
-func sumPerimeter_Dict(x, y shapeExt_Value) int {
-	return x.perimeter(x.val) + y.perimeter(y.val)
+func sumPersons_Dict(x, y organization_Value) int {
+	return x.persons(x.val) + y.persons(y.val)
 }
 
 // wrapper functions
-func perimeter_Rec_Wrapper(v interface{}) int {
-	return perimeter_Rec(v.(rectangle))
+func persons_association_wrapper(v interface{}) int {
+	return persons_association(v.(association))
 }
-func perimeter_Sq_Wrapper(v interface{}) int {
-	return perimeter_Sq(v.(square))
+func persons_company_wrapper(v interface{}) int {
+	return persons_company(v.(company))
 }

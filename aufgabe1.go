@@ -9,6 +9,7 @@ type square struct {
 	length int
 }
 
+// with method overloading
 func (r rectangle) area() int {
 	return r.length * r.width
 }
@@ -25,7 +26,7 @@ func sumArea(x, y shape) int {
 	return x.area() + y.area()
 }
 
-// Introducing unique function names for overloaded methods
+// Run-time method lookup
 func area_Rec(r rectangle) int {
 	return r.length * r.width
 }
@@ -34,7 +35,6 @@ func area_Sq(s square) int {
 	return s.length * s.length
 }
 
-// Run-time method lookup
 func area_Lookup(x interface{}) int {
 	var y int
 

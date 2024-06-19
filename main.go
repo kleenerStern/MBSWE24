@@ -53,29 +53,69 @@ func aufgabe1() {
 
 func aufgabe2() {
 	// Actual Test
-	// init shapes
-	var r rectangle = rectangle{1, 2}
-	var s square = square{3}
+	// init organizations
+	var a association = association{2000, 18}
+	var c company = company{350}
 
 	//init dict shapes with value and wrapper func
-	rDictShapeExt := shapeExt_Value{r, area_Rec_Wrapper, perimeter_Rec_Wrapper}
-	sDictShapeExt := shapeExt_Value{s, area_Sq_Wrapper, perimeter_Sq_Wrapper}
+	aDictPersons := organization_Value{a, persons_association_wrapper}
+	cDictPersons := organization_Value{c, persons_company_wrapper}
 
 	startingTimeLookup := time.Now()
 	time.Sleep(1 * time.Second)
 	for i := 0; i < 1000; i++ {
-		sumPerimeter_Lookup(r, s)
+		sumPersons_Lookup(a, c)
 	}
 	executionTimeLookup := time.Since(startingTimeLookup) - 1*time.Second
 
 	startingTimeDict := time.Now()
 	time.Sleep(1 * time.Second)
 	for i := 0; i < 1000; i++ {
-		sumPerimeter_Dict(rDictShapeExt, sDictShapeExt)
+		sumPersons_Dict(aDictPersons, cDictPersons)
 	}
 	executionTimeDict := time.Since(startingTimeDict) - 1*time.Second
 
 	printResults(executionTimeDict, executionTimeLookup)
+}
+
+func aufgabe4() {
+	// with method overloading
+	i1 := integer{1}
+	i2 := integer{2}
+	i3 := integer{3}
+	i4 := integer{4}
+
+	n1 := node[integer]{i1, nil}
+	n2 := node[integer]{i2, nil}
+	n3 := node[integer]{i3, nil}
+	n4 := node[integer]{i4, nil}
+
+	n1.next = &n2
+	n2.next = &n3
+	n3.next = &n4
+
+	// default variant with method overrides and interfaces
+	fmt.Println(showNode[integer](&n1))
+
+	// lookup variant without interfaces / method overloading
+	fmt.Println(showNodeLookup[integer](&n1))
+
+	// dictionary variant without interfaces / method overloading
+	d1 := show_value{integer{1}, show_integer_wrapper}
+	d2 := show_value{integer{2}, show_integer_wrapper}
+	d3 := show_value{integer{3}, show_integer_wrapper}
+	d4 := show_value{integer{4}, show_integer_wrapper}
+
+	nd1 := node[show_value]{d1, nil}
+	nd2 := node[show_value]{d2, nil}
+	nd3 := node[show_value]{d3, nil}
+	nd4 := node[show_value]{d4, nil}
+
+	nd1.next = &nd2
+	nd2.next = &nd3
+	nd3.next = &nd4
+
+	fmt.Println(showNodeDict(&nd1))
 }
 
 func main() {
@@ -83,4 +123,8 @@ func main() {
 	aufgabe1()
 	fmt.Println("--------------------------Aufgabe 2----------------------------------")
 	aufgabe2()
+	fmt.Println("--------------------------Aufgabe 3----------------------------------")
+	// todo
+	fmt.Println("--------------------------Aufgabe 4----------------------------------")
+	aufgabe4()
 }
