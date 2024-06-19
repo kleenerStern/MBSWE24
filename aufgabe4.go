@@ -19,7 +19,7 @@ type integer struct {
 	val int
 }
 
-// Type Bound Variant with method overloading and without interfaces / method overloading
+// Variant with method overloading and interfaces
 func (this boolean) show() string {
 	if this.val {
 		return "true"
@@ -45,7 +45,7 @@ func showNode[T Show](n *node[T]) string {
 	return s
 }
 
-// Variant with method lookup
+// Variant with method lookup and without interfaces / method overloading
 func show_integer(i integer) string {
 	return strconv.Itoa(i.val)
 }
