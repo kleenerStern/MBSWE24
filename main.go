@@ -52,30 +52,34 @@ func aufgabe1() {
 }
 
 func aufgabe2() {
-	// Actual Test
 	// init organizations
 	var a association = association{2000, 18}
 	var c company = company{350}
 
-	//init dict shapes with value and wrapper func
+	//init dict persons with value and wrapper func
 	aDictPersons := organization_Value{a, persons_association_wrapper}
 	cDictPersons := organization_Value{c, persons_company_wrapper}
 
-	startingTimeLookup := time.Now()
-	time.Sleep(1 * time.Second)
-	for i := 0; i < 1000; i++ {
-		sumPersons_Lookup(a, c)
-	}
-	executionTimeLookup := time.Since(startingTimeLookup) - 1*time.Second
+	fmt.Println("SumPersons_Lookup:")
+	fmt.Println("The Sum of the persons in a association{2000,18} and a company{350} is: ", sumPersons_Lookup(a, c))
+	fmt.Println("SumArea_Lookup with type bound:")
+	fmt.Println("The Sum of the persons in a association{2000,18} and a company{350} is: ", sumPersons_Dict(aDictPersons, cDictPersons))
+}
 
-	startingTimeDict := time.Now()
-	time.Sleep(1 * time.Second)
-	for i := 0; i < 1000; i++ {
-		sumPersons_Dict(aDictPersons, cDictPersons)
-	}
-	executionTimeDict := time.Since(startingTimeDict) - 1*time.Second
+func aufgabe3() {
+	// Actual Test
+	// init shapes
+	var r rectangle = rectangle{1, 2}
+	var s square = square{3}
 
-	printResults(executionTimeDict, executionTimeLookup)
+	//init dict shapes with value and wrapper func
+	rDictShape := shape_Value{r, area_Rec_Wrapper}
+	sDictShape := shape_Value{s, area_Sq_Wrapper}
+
+	fmt.Println("SumArea_Lookup with type assertion:")
+	fmt.Println("The Sum of the areas of rectangle{1,2} and square{3} is: ", sumArea_Lookup_Variant(r, s))
+	fmt.Println("SumArea_Lookup with type bound:")
+	fmt.Println("The Sum of the areas of rectangle{1,2} and square{3} is: ", sumArea_Dict_Variant(rDictShape, sDictShape))
 }
 
 func aufgabe4() {
@@ -94,10 +98,12 @@ func aufgabe4() {
 	n2.next = &n3
 	n3.next = &n4
 
-	// default variant with method overrides and interfaces
+	// default variant with method overloading and interfaces
+	fmt.Println("Shownode with method overrides and interfaces:")
 	fmt.Println(showNode[integer](&n1))
 
 	// lookup variant without interfaces / method overloading
+	fmt.Println("Shownode lookup without method overloading and interfaces:")
 	fmt.Println(showNodeLookup[integer](&n1))
 
 	// dictionary variant without interfaces / method overloading
@@ -115,6 +121,7 @@ func aufgabe4() {
 	nd2.next = &nd3
 	nd3.next = &nd4
 
+	fmt.Println("Shownode with dictionary translation:")
 	fmt.Println(showNodeDict(&nd1))
 }
 
@@ -124,7 +131,7 @@ func main() {
 	fmt.Println("--------------------------Aufgabe 2----------------------------------")
 	aufgabe2()
 	fmt.Println("--------------------------Aufgabe 3----------------------------------")
-	// todo
+	aufgabe3()
 	fmt.Println("--------------------------Aufgabe 4----------------------------------")
 	aufgabe4()
 }
